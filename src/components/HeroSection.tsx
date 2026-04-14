@@ -23,7 +23,7 @@ export default function HeroSection() {
         style={{ transform: mounted ? "scale(1)" : "scale(1.15)", transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
       >
         <img
-          src="/style-scroll-story/assets/hero-living.jpg"
+          src={heroImage}
           alt="Luxurious living room by Vishesh Livings"
           className="h-full w-full object-cover"
           width={1920}
