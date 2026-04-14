@@ -8,7 +8,7 @@ export default function HeroSection() {
   return (
     <section id="hero" className="relative h-screen w-full overflow-hidden">
       {/* Background image */}
-      <div className="absolute inset-0 animate-[hero-zoom_2s_cubic-bezier(0.16,1,0.3,1)_forwards]">
+      <div className="absolute inset-0">
         <img
           src={heroImage}
           alt="Luxurious living room by Vishesh Livings"
@@ -27,7 +27,7 @@ export default function HeroSection() {
       {/* Content */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
         {/* Tagline */}
-        <div className="mb-8 flex items-center gap-1 animate-fade-up" style={{ animationDelay: "0.4s", opacity: 0 }}>
+        <div className="mb-8 flex items-center gap-1">
           <span
             className="inline-block h-px w-8 mr-3"
             style={{ backgroundColor: "var(--gold)" }}
@@ -45,12 +45,10 @@ export default function HeroSection() {
         </div>
 
         <h1
-          className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05] animate-fade-up"
+          className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05]"
           style={{
             fontFamily: "var(--font-display)",
             color: "var(--warm-cream)",
-            animationDelay: "0.9s",
-            opacity: 0,
           }}
         >
           Where Your Home
@@ -59,17 +57,14 @@ export default function HeroSection() {
         </h1>
 
         <p
-          className="mt-6 max-w-lg text-base md:text-lg leading-relaxed animate-fade-in"
-          style={{ color: "rgba(245,242,235,0.8)", animationDelay: "1.3s", opacity: 0 }}
+          className="mt-6 max-w-lg text-base md:text-lg leading-relaxed"
+          style={{ color: "rgba(245,242,235,0.8)" }}
         >
           Curated furnishings and bespoke decor designed to transform
           everyday spaces into enduring sanctuaries of warmth and beauty.
         </p>
 
-        <div
-          className="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-up"
-          style={{ animationDelay: "1.6s", opacity: 0 }}
-        >
+        <div className="mt-10 flex flex-col sm:flex-row gap-4">
           <button onClick={() => scrollTo("offerings")} className="btn-primary">
             Explore Our World
           </button>
@@ -80,10 +75,7 @@ export default function HeroSection() {
       </div>
 
       {/* Scroll indicator */}
-      <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 animate-fade-in"
-        style={{ animationDelay: "2.2s", opacity: 0 }}
-      >
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
         <span className="text-[10px] uppercase tracking-[0.25em]" style={{ color: "var(--gold-light)" }}>
           Scroll
         </span>

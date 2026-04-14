@@ -16,23 +16,32 @@ export default function ScrollReveal({
   duration = 0.8,
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true); // default visible for SSR
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    setHydrated(true);
+    setVisible(false); // hide after hydration to animate in
+
     const el = ref.current;
     if (!el) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.unobserve(el);
-        }
-      },
-      { threshold: 0.1, rootMargin: "-60px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
+    // Small delay to ensure the hidden state is painted first
+    const timeout = setTimeout(() => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisible(true);
+            observer.unobserve(el);
+          }
+        },
+        { threshold: 0.1, rootMargin: "-40px" }
+      );
+      observer.observe(el);
+      return () => observer.disconnect();
+    }, 50);
+
+    return () => clearTimeout(timeout);
   }, []);
 
   const dirs: Record<string, string> = {
@@ -43,17 +52,17 @@ export default function ScrollReveal({
     none: "translateY(0)",
   };
 
-  return (
-    <div
-      ref={ref}
-      className={className}
-      style={{
+  const style = hydrated
+    ? {
         opacity: visible ? 1 : 0,
         transform: visible ? "translate(0, 0)" : dirs[direction] || dirs.up,
         transition: `opacity ${duration}s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform ${duration}s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
-        willChange: "opacity, transform",
-      }}
-    >
+        willChange: "opacity, transform" as const,
+      }
+    : {};
+
+  return (
+    <div ref={ref} className={className} style={style}>
       {children}
     </div>
   );
