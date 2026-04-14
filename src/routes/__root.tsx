@@ -38,6 +38,10 @@ export const Route = createRootRoute({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { property: "og:title", content: "Vishesh Livings — Premium Home Decor & Furnishing" },
+      { name: "twitter:title", content: "Vishesh Livings — Premium Home Decor & Furnishing" },
+      { property: "og:description", content: "Curated furnishings and bespoke home decor by Vishesh Livings." },
+      { name: "twitter:description", content: "Curated furnishings and bespoke home decor by Vishesh Livings." },
     ],
     links: [
       {
