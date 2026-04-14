@@ -65,6 +65,10 @@
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
 }
+@keyframes hero-zoom {
+  from { transform: scale(1.15); }
+  to { transform: scale(1); }
+}
 
 :root {
   --radius: 0.5rem;

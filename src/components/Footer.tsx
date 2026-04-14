@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 
 export default function Footer() {
@@ -9,15 +8,12 @@ export default function Footer() {
         <ScrollReveal className="mb-16">
           <div className="flex items-center justify-center gap-4">
             <div className="h-px flex-1 max-w-24" style={{ backgroundColor: "rgba(245,242,235,0.12)" }} />
-            <motion.span
+            <span
               className="text-lg md:text-2xl italic tracking-wide"
               style={{ fontFamily: "var(--font-display)", color: "var(--gold)" }}
-              whileInView={{ opacity: [0, 1] }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.2 }}
             >
               Live Special
-            </motion.span>
+            </span>
             <div className="h-px flex-1 max-w-24" style={{ backgroundColor: "rgba(245,242,235,0.12)" }} />
           </div>
         </ScrollReveal>

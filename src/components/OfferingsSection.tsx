@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 
 const offerings = [
@@ -47,17 +46,15 @@ export default function OfferingsSection() {
         <div className="space-y-0">
           {offerings.map((item, i) => (
             <ScrollReveal key={item.number} delay={i * 0.08}>
-              <motion.div
-                className="group flex flex-col md:flex-row md:items-center gap-4 md:gap-12 py-8 border-t cursor-default"
+              <div
+                className="group flex flex-col md:flex-row md:items-center gap-4 md:gap-12 py-8 border-t cursor-default transition-transform duration-400 hover:translate-x-3"
                 style={{ borderColor: "rgba(245,242,235,0.1)" }}
-                whileHover={{ x: 12 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               >
-                <span className="text-sm font-medium" style={{ color: "var(--gold)", minWidth: "3rem" }}>
+                <span className="text-sm font-medium shrink-0 w-12" style={{ color: "var(--gold)" }}>
                   {item.number}
                 </span>
                 <h3
-                  className="text-xl md:text-2xl font-light tracking-tight md:min-w-[320px] transition-colors duration-500"
+                  className="text-xl md:text-2xl font-light tracking-tight md:min-w-[320px] shrink-0 transition-colors duration-500"
                   style={{ fontFamily: "var(--font-display)", color: "var(--warm-cream)" }}
                 >
                   {item.title}
@@ -65,7 +62,7 @@ export default function OfferingsSection() {
                 <p className="text-sm md:text-base leading-relaxed max-w-md" style={{ color: "rgba(245,242,235,0.55)" }}>
                   {item.description}
                 </p>
-              </motion.div>
+              </div>
             </ScrollReveal>
           ))}
         </div>

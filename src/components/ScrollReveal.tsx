@@ -1,5 +1,4 @@
-import { motion, type Variants } from "framer-motion";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -9,38 +8,61 @@ interface ScrollRevealProps {
   duration?: number;
 }
 
-const getVariants = (direction: string, distance = 60): Variants => {
-  const dirs: Record<string, { x?: number; y?: number }> = {
-    up: { y: distance },
-    down: { y: -distance },
-    left: { x: distance },
-    right: { x: -distance },
-    none: {},
-  };
-  const d = dirs[direction] || {};
-  return {
-    hidden: { opacity: 0, ...d },
-    visible: { opacity: 1, x: 0, y: 0 },
-  };
-};
-
 export default function ScrollReveal({
   children,
   className,
   delay = 0,
   direction = "up",
-  duration = 0.8,
 }: ScrollRevealProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [isBrowser, setIsBrowser] = useState(false);
+
+  useEffect(() => {
+    setIsBrowser(true);
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.05, rootMargin: "0px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // During SSR or before hydration, render children normally (visible)
+  if (!isBrowser) {
+    return <div className={className}>{children}</div>;
+  }
+
+  const getTransform = () => {
+    if (visible) return "translate3d(0, 0, 0)";
+    switch (direction) {
+      case "up": return "translate3d(0, 40px, 0)";
+      case "down": return "translate3d(0, -40px, 0)";
+      case "left": return "translate3d(40px, 0, 0)";
+      case "right": return "translate3d(-40px, 0, 0)";
+      default: return "translate3d(0, 0, 0)";
+    }
+  };
+
   return (
-    <motion.div
+    <div
+      ref={ref}
       className={className}
-      variants={getVariants(direction)}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: getTransform(),
+        transition: `opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
+      }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

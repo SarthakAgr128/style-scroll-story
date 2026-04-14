@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 
 const pillars = [
@@ -47,17 +46,13 @@ export default function PhilosophySection() {
           <div className="flex flex-col gap-10 lg:pt-20">
             {pillars.map((p, i) => (
               <ScrollReveal key={p.title} delay={i * 0.12} direction="right">
-                <motion.div
-                  className="group flex gap-6 p-6 rounded-sm transition-colors duration-500 hover:bg-accent"
-                  whileHover={{ x: 8 }}
-                  transition={{ duration: 0.3 }}
-                >
+                <div className="group flex gap-6 p-6 rounded-sm transition-all duration-500 hover:bg-accent hover:translate-x-2">
                   <span className="text-2xl text-gold mt-1 shrink-0">{p.icon}</span>
                   <div>
-                    <h3 className="heading-md text-foreground mb-2 text-lg md:text-xl">{p.title}</h3>
+                    <h3 className="text-lg md:text-xl font-light tracking-tight text-foreground mb-2" style={{ fontFamily: "var(--font-display)" }}>{p.title}</h3>
                     <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{p.text}</p>
                   </div>
-                </motion.div>
+                </div>
               </ScrollReveal>
             ))}
           </div>
