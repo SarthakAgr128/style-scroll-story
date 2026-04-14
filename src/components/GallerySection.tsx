@@ -1,14 +1,10 @@
 import ScrollReveal from "./ScrollReveal";
-import gallery1 from "@/assets/gallery-1.jpg";
-import gallery2 from "@/assets/gallery-2.jpg";
-import gallery3 from "@/assets/gallery-3.jpg";
-import gallery4 from "@/assets/gallery-4.jpg";
 
 const images = [
-  { src: gallery1, alt: "Elegant dining room", label: "Dining" },
-  { src: gallery2, alt: "Artisanal home textiles", label: "Textiles" },
-  { src: gallery3, alt: "Modern home office", label: "Workspace" },
-  { src: gallery4, alt: "Luxury bathroom details", label: "Bath" },
+  { src: "https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&q=80&auto=format&fit=crop", alt: "Elegant dining room", label: "Dining" },
+  { src: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80&auto=format&fit=crop", alt: "Artisanal home textiles", label: "Textiles" },
+  { src: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80&auto=format&fit=crop", alt: "Modern home office", label: "Workspace" },
+  { src: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80&auto=format&fit=crop", alt: "Luxury bathroom details", label: "Bath" },
 ];
 
 export default function GallerySection() {

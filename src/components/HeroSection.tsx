@@ -1,4 +1,4 @@
-import heroImage from "@/assets/hero-living.jpg";
+const heroImage = "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&q=80&auto=format&fit=crop";
 
 export default function HeroSection() {
   const scrollTo = (id: string) => {

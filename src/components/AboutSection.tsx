@@ -1,5 +1,6 @@
 import ScrollReveal from "./ScrollReveal";
-import aboutImage from "@/assets/about-interior.jpg";
+
+const aboutImage = "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1200&q=80&auto=format&fit=crop";
 
 export default function AboutSection() {
   return (
