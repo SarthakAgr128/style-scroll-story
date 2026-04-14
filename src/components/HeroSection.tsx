@@ -13,53 +13,30 @@ export default function HeroSection() {
           src={heroImage}
           alt="Luxurious living room by Vishesh Livings"
           className="h-full w-full object-cover"
-          width={1920}
-          height={1080}
         />
-        <div
-          className="absolute inset-0"
-          style={{
-            background: "linear-gradient(to bottom, rgba(30,25,18,0.55) 0%, rgba(30,25,18,0.3) 50%, rgba(30,25,18,0.7) 100%)",
-          }}
-        />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
-        {/* Tagline */}
-        <div className="mb-8 flex items-center gap-1">
-          <span
-            className="inline-block h-px w-8 mr-3"
-            style={{ backgroundColor: "var(--gold)" }}
-          />
-          <span
-            className="text-sm md:text-base uppercase tracking-[0.35em] font-medium"
-            style={{ color: "var(--gold-light)" }}
-          >
+      <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center" style={{ position: "relative", zIndex: 10 }}>
+        <div className="mb-8 flex items-center gap-3">
+          <span className="inline-block h-px w-8 bg-amber-400" />
+          <span className="text-sm md:text-base uppercase tracking-[0.35em] font-medium text-amber-300">
             Live Special
           </span>
-          <span
-            className="inline-block h-px w-8 ml-3"
-            style={{ backgroundColor: "var(--gold)" }}
-          />
+          <span className="inline-block h-px w-8 bg-amber-400" />
         </div>
 
         <h1
-          className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05]"
-          style={{
-            fontFamily: "var(--font-display)",
-            color: "var(--warm-cream)",
-          }}
+          className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05] text-white"
+          style={{ fontFamily: "var(--font-display)" }}
         >
           Where Your Home
           <br />
           <em className="font-normal italic">Finds Its Soul</em>
         </h1>
 
-        <p
-          className="mt-6 max-w-lg text-base md:text-lg leading-relaxed"
-          style={{ color: "rgba(245,242,235,0.8)" }}
-        >
+        <p className="mt-6 max-w-lg text-base md:text-lg leading-relaxed text-white/80">
           Curated furnishings and bespoke decor designed to transform
           everyday spaces into enduring sanctuaries of warmth and beauty.
         </p>
@@ -68,18 +45,16 @@ export default function HeroSection() {
           <button onClick={() => scrollTo("offerings")} className="btn-primary">
             Explore Our World
           </button>
-          <button onClick={() => scrollTo("contact")} className="btn-outline" style={{ borderColor: "var(--warm-cream)", color: "var(--warm-cream)" }}>
+          <button onClick={() => scrollTo("contact")} className="inline-flex items-center gap-2 px-8 py-4 text-sm uppercase tracking-[0.15em] font-medium border border-white text-white transition-all duration-500 hover:bg-white hover:text-black">
             Get in Touch
           </button>
         </div>
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
-        <span className="text-[10px] uppercase tracking-[0.25em]" style={{ color: "var(--gold-light)" }}>
-          Scroll
-        </span>
-        <div className="h-10 w-px animate-pulse" style={{ backgroundColor: "var(--gold-light)" }} />
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3" style={{ position: "absolute", zIndex: 10 }}>
+        <span className="text-[10px] uppercase tracking-[0.25em] text-amber-300">Scroll</span>
+        <div className="h-10 w-px bg-amber-300 animate-pulse" />
       </div>
     </section>
   );

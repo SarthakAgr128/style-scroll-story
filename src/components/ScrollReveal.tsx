@@ -13,56 +13,55 @@ export default function ScrollReveal({
   className,
   delay = 0,
   direction = "up",
-  duration = 0.8,
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(true); // default visible for SSR
-  const [hydrated, setHydrated] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [isBrowser, setIsBrowser] = useState(false);
 
   useEffect(() => {
-    setHydrated(true);
-    setVisible(false); // hide after hydration to animate in
-
+    setIsBrowser(true);
     const el = ref.current;
     if (!el) return;
 
-    // Small delay to ensure the hidden state is painted first
-    const timeout = setTimeout(() => {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            observer.unobserve(el);
-          }
-        },
-        { threshold: 0.1, rootMargin: "-40px" }
-      );
-      observer.observe(el);
-      return () => observer.disconnect();
-    }, 50);
-
-    return () => clearTimeout(timeout);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.05, rootMargin: "0px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
-  const dirs: Record<string, string> = {
-    up: "translateY(50px)",
-    down: "translateY(-50px)",
-    left: "translateX(50px)",
-    right: "translateX(-50px)",
-    none: "translateY(0)",
+  // During SSR or before hydration, render children normally (visible)
+  if (!isBrowser) {
+    return <div className={className}>{children}</div>;
+  }
+
+  const getTransform = () => {
+    if (visible) return "translate3d(0, 0, 0)";
+    switch (direction) {
+      case "up": return "translate3d(0, 40px, 0)";
+      case "down": return "translate3d(0, -40px, 0)";
+      case "left": return "translate3d(40px, 0, 0)";
+      case "right": return "translate3d(-40px, 0, 0)";
+      default: return "translate3d(0, 0, 0)";
+    }
   };
 
-  const style = hydrated
-    ? {
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translate(0, 0)" : dirs[direction] || dirs.up,
-        transition: `opacity ${duration}s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform ${duration}s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
-        willChange: "opacity, transform" as const,
-      }
-    : {};
-
   return (
-    <div ref={ref} className={className} style={style}>
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: getTransform(),
+        transition: `opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
+      }}
+    >
       {children}
     </div>
   );

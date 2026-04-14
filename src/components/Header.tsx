@@ -23,33 +23,36 @@ export default function Header() {
     { label: "Contact", id: "contact" },
   ];
 
+  const textColor = scrolled ? "#2a2218" : "#f5f2eb";
+
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+        className="fixed top-0 left-0 right-0 transition-all duration-500"
         style={{
+          zIndex: 50,
           backgroundColor: scrolled ? "rgba(245, 242, 235, 0.95)" : "transparent",
           backdropFilter: scrolled ? "blur(12px)" : "none",
           borderBottom: scrolled ? "1px solid rgba(0,0,0,0.06)" : "none",
         }}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 md:px-12">
-          <button onClick={() => scrollTo("hero")} className="z-10">
+          <button onClick={() => scrollTo("hero")}>
             <span
               className="text-xl md:text-2xl font-medium tracking-[0.08em]"
-              style={{ fontFamily: "var(--font-display)", color: scrolled ? "var(--warm-dark)" : "var(--warm-cream)" }}
+              style={{ fontFamily: "var(--font-display)", color: textColor }}
             >
               VISHESH LIVINGS
             </span>
           </button>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center" style={{ gap: "2rem" }}>
             {navItems.map((item) => (
               <button
                 key={item.id}
                 onClick={() => scrollTo(item.id)}
-                className="text-xs uppercase tracking-[0.18em] font-medium transition-colors duration-300 hover:opacity-70"
-                style={{ color: scrolled ? "var(--warm-dark)" : "var(--warm-cream)" }}
+                className="text-xs uppercase font-medium transition-opacity duration-300 hover:opacity-70"
+                style={{ letterSpacing: "0.18em", color: textColor }}
               >
                 {item.label}
               </button>
@@ -58,41 +61,25 @@ export default function Header() {
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden z-10 flex flex-col gap-1.5"
+            className="md:hidden flex flex-col"
+            style={{ gap: "6px", zIndex: 60 }}
             aria-label="Toggle menu"
           >
-            <span
-              className="block h-px w-6 transition-all duration-300"
-              style={{
-                backgroundColor: menuOpen ? "var(--warm-dark)" : scrolled ? "var(--warm-dark)" : "var(--warm-cream)",
-                transform: menuOpen ? "rotate(45deg) translateY(4px)" : "none",
-              }}
-            />
-            <span
-              className="block h-px w-6 transition-all duration-300"
-              style={{
-                backgroundColor: menuOpen ? "var(--warm-dark)" : scrolled ? "var(--warm-dark)" : "var(--warm-cream)",
-                opacity: menuOpen ? 0 : 1,
-              }}
-            />
-            <span
-              className="block h-px w-6 transition-all duration-300"
-              style={{
-                backgroundColor: menuOpen ? "var(--warm-dark)" : scrolled ? "var(--warm-dark)" : "var(--warm-cream)",
-                transform: menuOpen ? "rotate(-45deg) translateY(-4px)" : "none",
-              }}
-            />
+            <span className="block h-px w-6" style={{ backgroundColor: textColor, transform: menuOpen ? "rotate(45deg) translateY(4px)" : "none", transition: "all 0.3s" }} />
+            <span className="block h-px w-6" style={{ backgroundColor: textColor, opacity: menuOpen ? 0 : 1, transition: "all 0.3s" }} />
+            <span className="block h-px w-6" style={{ backgroundColor: textColor, transform: menuOpen ? "rotate(-45deg) translateY(-4px)" : "none", transition: "all 0.3s" }} />
           </button>
         </div>
       </header>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8" style={{ backgroundColor: "var(--warm-cream)" }}>
+        <div className="fixed inset-0 flex flex-col items-center justify-center" style={{ zIndex: 55, backgroundColor: "#f5f2eb", gap: "2rem" }}>
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => scrollTo(item.id)}
-              className="heading-md text-foreground"
+              className="text-2xl font-light tracking-tight"
+              style={{ fontFamily: "var(--font-display)", color: "#2a2218" }}
             >
               {item.label}
             </button>
