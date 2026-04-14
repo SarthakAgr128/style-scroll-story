@@ -1,24 +1,28 @@
-import { motion } from "framer-motion";
-import heroImage from "@/assets/hero-living.jpg";
-
-const taglineLetters = "Live Special".split("");
+import { useEffect, useState } from "react";
 
 export default function HeroSection() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setMounted(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const tagline = "Live Special";
+
   return (
     <section id="hero" className="relative h-screen w-full overflow-hidden">
-      {/* Background image with parallax-like zoom */}
-      <motion.div
-        className="absolute inset-0"
-        initial={{ scale: 1.15 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+      {/* Background image */}
+      <div
+        className="absolute inset-0 transition-transform duration-[2000ms]"
+        style={{ transform: mounted ? "scale(1)" : "scale(1.15)", transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
       >
         <img
-          src={heroImage}
+          src="/style-scroll-story/assets/hero-living.jpg"
           alt="Luxurious living room by Vishesh Livings"
           className="h-full w-full object-cover"
           width={1920}
@@ -30,75 +34,57 @@ export default function HeroSection() {
             background: "linear-gradient(to bottom, rgba(30,25,18,0.55) 0%, rgba(30,25,18,0.3) 50%, rgba(30,25,18,0.7) 100%)",
           }}
         />
-      </motion.div>
+      </div>
 
       {/* Content */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
-        {/* Tagline — letter-by-letter reveal */}
-        <motion.div
-          className="mb-8 flex items-center gap-1 overflow-hidden"
-          initial="hidden"
-          animate="visible"
-          variants={{ visible: { transition: { staggerChildren: 0.05, delayChildren: 0.4 } } }}
+        {/* Tagline */}
+        <div
+          className="mb-8 flex items-center gap-1 transition-all duration-1000"
+          style={{ opacity: mounted ? 1 : 0, transform: mounted ? "translateY(0)" : "translateY(20px)", transitionDelay: "0.4s" }}
         >
-          <motion.span
-            className="inline-block h-px w-8 mr-3"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            style={{ backgroundColor: "var(--gold)", transformOrigin: "left" }}
+          <span
+            className="inline-block h-px w-8 mr-3 transition-transform duration-800"
+            style={{ backgroundColor: "var(--gold)", transformOrigin: "left", transform: mounted ? "scaleX(1)" : "scaleX(0)", transitionDelay: "0.3s" }}
           />
-          {taglineLetters.map((letter, i) => (
-            <motion.span
-              key={`${letter}-${i}`}
-              className="text-sm md:text-base uppercase tracking-[0.35em] font-medium"
-              style={{ color: "var(--gold-light)" }}
-              variants={{
-                hidden: { opacity: 0, y: 20, rotateX: 90 },
-                visible: { opacity: 1, y: 0, rotateX: 0 },
-              }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {letter === " " ? "\u00A0" : letter}
-            </motion.span>
-          ))}
-          <motion.span
-            className="inline-block h-px w-8 ml-3"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            style={{ backgroundColor: "var(--gold)", transformOrigin: "right" }}
+          <span
+            className="text-sm md:text-base uppercase tracking-[0.35em] font-medium"
+            style={{ color: "var(--gold-light)" }}
+          >
+            {tagline}
+          </span>
+          <span
+            className="inline-block h-px w-8 ml-3 transition-transform duration-800"
+            style={{ backgroundColor: "var(--gold)", transformOrigin: "right", transform: mounted ? "scaleX(1)" : "scaleX(0)", transitionDelay: "1s" }}
           />
-        </motion.div>
+        </div>
 
-        <motion.h1
-          className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05]"
-          style={{ fontFamily: "var(--font-display)", color: "var(--warm-cream)" }}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        <h1
+          className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05] transition-all duration-1000"
+          style={{
+            fontFamily: "var(--font-display)",
+            color: "var(--warm-cream)",
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? "translateY(0)" : "translateY(40px)",
+            transitionDelay: "0.9s",
+          }}
         >
           Where Your Home
           <br />
           <em className="font-normal italic">Finds Its Soul</em>
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          className="mt-6 max-w-lg text-base md:text-lg leading-relaxed"
-          style={{ color: "rgba(245,242,235,0.8)" }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.3, duration: 1 }}
+        <p
+          className="mt-6 max-w-lg text-base md:text-lg leading-relaxed transition-all duration-1000"
+          style={{ color: "rgba(245,242,235,0.8)", opacity: mounted ? 1 : 0, transitionDelay: "1.3s" }}
         >
           Curated furnishings and bespoke decor designed to transform
           everyday spaces into enduring sanctuaries of warmth and beauty.
-        </motion.p>
+        </p>
 
-        <motion.div
-          className="mt-10 flex flex-col sm:flex-row gap-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.6, duration: 0.8 }}
+        <div
+          className="mt-10 flex flex-col sm:flex-row gap-4 transition-all duration-800"
+          style={{ opacity: mounted ? 1 : 0, transform: mounted ? "translateY(0)" : "translateY(20px)", transitionDelay: "1.6s" }}
         >
           <button onClick={() => scrollTo("offerings")} className="btn-primary">
             Explore Our World
@@ -106,26 +92,19 @@ export default function HeroSection() {
           <button onClick={() => scrollTo("contact")} className="btn-outline" style={{ borderColor: "var(--warm-cream)", color: "var(--warm-cream)" }}>
             Get in Touch
           </button>
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll indicator */}
-      <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.2, duration: 1 }}
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 transition-opacity duration-1000"
+        style={{ opacity: mounted ? 1 : 0, transitionDelay: "2.2s" }}
       >
         <span className="text-[10px] uppercase tracking-[0.25em]" style={{ color: "var(--gold-light)" }}>
           Scroll
         </span>
-        <motion.div
-          className="h-10 w-px"
-          style={{ backgroundColor: "var(--gold-light)", transformOrigin: "top" }}
-          animate={{ scaleY: [0, 1, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </motion.div>
+        <div className="h-10 w-px animate-pulse" style={{ backgroundColor: "var(--gold-light)" }} />
+      </div>
     </section>
   );
 }

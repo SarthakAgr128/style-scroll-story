@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -26,16 +25,13 @@ export default function Header() {
 
   return (
     <>
-      <motion.header
+      <header
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
         style={{
           backgroundColor: scrolled ? "rgba(245, 242, 235, 0.95)" : "transparent",
           backdropFilter: scrolled ? "blur(12px)" : "none",
           borderBottom: scrolled ? "1px solid rgba(0,0,0,0.06)" : "none",
         }}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 md:px-12">
           <button onClick={() => scrollTo("hero")} className="z-10">
@@ -63,6 +59,7 @@ export default function Header() {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="md:hidden z-10 flex flex-col gap-1.5"
+            aria-label="Toggle menu"
           >
             <span
               className="block h-px w-6 transition-all duration-300"
@@ -87,32 +84,21 @@ export default function Header() {
             />
           </button>
         </div>
-      </motion.header>
+      </header>
 
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-warm-cream"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            {navItems.map((item, i) => (
-              <motion.button
-                key={item.id}
-                onClick={() => scrollTo(item.id)}
-                className="heading-md text-foreground"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08, duration: 0.5 }}
-              >
-                {item.label}
-              </motion.button>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {menuOpen && (
+        <div className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-8" style={{ backgroundColor: "var(--warm-cream)" }}>
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => scrollTo(item.id)}
+              className="heading-md text-foreground"
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
     </>
   );
 }

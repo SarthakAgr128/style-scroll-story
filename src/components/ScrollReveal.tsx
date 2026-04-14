@@ -1,5 +1,4 @@
-import { motion, type Variants } from "framer-motion";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 interface ScrollRevealProps {
   children: ReactNode;
@@ -9,21 +8,6 @@ interface ScrollRevealProps {
   duration?: number;
 }
 
-const getVariants = (direction: string, distance = 60): Variants => {
-  const dirs: Record<string, { x?: number; y?: number }> = {
-    up: { y: distance },
-    down: { y: -distance },
-    left: { x: distance },
-    right: { x: -distance },
-    none: {},
-  };
-  const d = dirs[direction] || {};
-  return {
-    hidden: { opacity: 0, ...d },
-    visible: { opacity: 1, x: 0, y: 0 },
-  };
-};
-
 export default function ScrollReveal({
   children,
   className,
@@ -31,16 +15,46 @@ export default function ScrollReveal({
   direction = "up",
   duration = 0.8,
 }: ScrollRevealProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.1, rootMargin: "-60px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const dirs: Record<string, string> = {
+    up: "translateY(50px)",
+    down: "translateY(-50px)",
+    left: "translateX(50px)",
+    right: "translateX(-50px)",
+    none: "translateY(0)",
+  };
+
   return (
-    <motion.div
+    <div
+      ref={ref}
       className={className}
-      variants={getVariants(direction)}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration, delay, ease: [0.16, 1, 0.3, 1] }}
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translate(0, 0)" : dirs[direction] || dirs.up,
+        transition: `opacity ${duration}s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform ${duration}s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
+        willChange: "opacity, transform",
+      }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
