@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import heroImage from "@/assets/hero-living.jpg";
 
+const taglineLetters = "Live Special".split("");
+
 export default function HeroSection() {
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -32,22 +34,50 @@ export default function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
-        <motion.p
-          className="label-text mb-6"
-          style={{ color: "var(--gold-light)" }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8 }}
+        {/* Tagline — letter-by-letter reveal */}
+        <motion.div
+          className="mb-8 flex items-center gap-1 overflow-hidden"
+          initial="hidden"
+          animate="visible"
+          variants={{ visible: { transition: { staggerChildren: 0.05, delayChildren: 0.4 } } }}
         >
-          Coming Soon
-        </motion.p>
+          <motion.span
+            className="inline-block h-px w-8 mr-3"
+            style={{ backgroundColor: "var(--gold)" }}
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            style={{ backgroundColor: "var(--gold)", transformOrigin: "left" }}
+          />
+          {taglineLetters.map((letter, i) => (
+            <motion.span
+              key={`${letter}-${i}`}
+              className="text-sm md:text-base uppercase tracking-[0.35em] font-medium"
+              style={{ color: "var(--gold-light)" }}
+              variants={{
+                hidden: { opacity: 0, y: 20, rotateX: 90 },
+                visible: { opacity: 1, y: 0, rotateX: 0 },
+              }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {letter === " " ? "\u00A0" : letter}
+            </motion.span>
+          ))}
+          <motion.span
+            className="inline-block h-px w-8 ml-3"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ delay: 1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            style={{ backgroundColor: "var(--gold)", transformOrigin: "right" }}
+          />
+        </motion.div>
 
         <motion.h1
           className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05]"
           style={{ fontFamily: "var(--font-display)", color: "var(--warm-cream)" }}
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ delay: 0.9, duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
           Where Your Home
           <br />
@@ -59,7 +89,7 @@ export default function HeroSection() {
           style={{ color: "rgba(245,242,235,0.8)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 1 }}
+          transition={{ delay: 1.3, duration: 1 }}
         >
           Curated furnishings and bespoke decor designed to transform
           everyday spaces into enduring sanctuaries of warmth and beauty.
@@ -69,7 +99,7 @@ export default function HeroSection() {
           className="mt-10 flex flex-col sm:flex-row gap-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, duration: 0.8 }}
+          transition={{ delay: 1.6, duration: 0.8 }}
         >
           <button onClick={() => scrollTo("offerings")} className="btn-primary">
             Explore Our World
@@ -82,13 +112,16 @@ export default function HeroSection() {
 
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
+        transition={{ delay: 2.2, duration: 1 }}
       >
+        <span className="text-[10px] uppercase tracking-[0.25em]" style={{ color: "var(--gold-light)" }}>
+          Scroll
+        </span>
         <motion.div
-          className="h-12 w-px"
+          className="h-10 w-px"
           style={{ backgroundColor: "var(--gold-light)", transformOrigin: "top" }}
           animate={{ scaleY: [0, 1, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
