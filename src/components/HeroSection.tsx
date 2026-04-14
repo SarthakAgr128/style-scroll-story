@@ -89,10 +89,9 @@ export default function HeroSection() {
       >
         <motion.div
           className="h-12 w-px"
-          style={{ backgroundColor: "var(--gold-light)" }}
+          style={{ backgroundColor: "var(--gold-light)", transformOrigin: "top" }}
           animate={{ scaleY: [0, 1, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          style={{ backgroundColor: "var(--gold-light)", transformOrigin: "top" }}
         />
       </motion.div>
     </section>
