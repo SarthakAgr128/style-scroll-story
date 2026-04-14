@@ -16,10 +16,8 @@ export default function ScrollReveal({
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
-  const [isBrowser, setIsBrowser] = useState(false);
 
   useEffect(() => {
-    setIsBrowser(true);
     const el = ref.current;
     if (!el) return;
 
@@ -30,16 +28,11 @@ export default function ScrollReveal({
           observer.unobserve(el);
         }
       },
-      { threshold: 0.05, rootMargin: "0px" }
+      { threshold: 0.05, rootMargin: "0px 0px 50px 0px" }
     );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
-
-  // During SSR or before hydration, render children normally (visible)
-  if (!isBrowser) {
-    return <div className={className}>{children}</div>;
-  }
 
   const getTransform = () => {
     if (visible) return "translate3d(0, 0, 0)";

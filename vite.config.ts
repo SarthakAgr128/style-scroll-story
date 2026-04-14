@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
-  base: '/style-scroll-story/',
+  base: '/',
   plugins: [
     react(),
     tailwindcss(),
