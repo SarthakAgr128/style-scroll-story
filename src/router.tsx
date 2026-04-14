@@ -68,7 +68,7 @@ export const router = createRouter({
   scrollRestoration: true,
   defaultPreloadStaleTime: 0,
   defaultErrorComponent: DefaultErrorComponent,
-  basepath: "/style-scroll-story",
+  basepath: "/",
 });
 
 declare module "@tanstack/react-router" {
