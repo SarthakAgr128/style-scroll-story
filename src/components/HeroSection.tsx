@@ -1,27 +1,14 @@
-import { useEffect, useState } from "react";
 import heroImage from "@/assets/hero-living.jpg";
 
 export default function HeroSection() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setMounted(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
-
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const tagline = "Live Special";
-
   return (
     <section id="hero" className="relative h-screen w-full overflow-hidden">
       {/* Background image */}
-      <div
-        className="absolute inset-0 transition-transform duration-[2000ms]"
-        style={{ transform: mounted ? "scale(1)" : "scale(1.15)", transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)" }}
-      >
+      <div className="absolute inset-0 animate-[hero-zoom_2s_cubic-bezier(0.16,1,0.3,1)_forwards]">
         <img
           src={heroImage}
           alt="Luxurious living room by Vishesh Livings"
@@ -40,34 +27,30 @@ export default function HeroSection() {
       {/* Content */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
         {/* Tagline */}
-        <div
-          className="mb-8 flex items-center gap-1 transition-all duration-1000"
-          style={{ opacity: mounted ? 1 : 0, transform: mounted ? "translateY(0)" : "translateY(20px)", transitionDelay: "0.4s" }}
-        >
+        <div className="mb-8 flex items-center gap-1 animate-fade-up" style={{ animationDelay: "0.4s", opacity: 0 }}>
           <span
-            className="inline-block h-px w-8 mr-3 transition-transform duration-800"
-            style={{ backgroundColor: "var(--gold)", transformOrigin: "left", transform: mounted ? "scaleX(1)" : "scaleX(0)", transitionDelay: "0.3s" }}
+            className="inline-block h-px w-8 mr-3"
+            style={{ backgroundColor: "var(--gold)" }}
           />
           <span
             className="text-sm md:text-base uppercase tracking-[0.35em] font-medium"
             style={{ color: "var(--gold-light)" }}
           >
-            {tagline}
+            Live Special
           </span>
           <span
-            className="inline-block h-px w-8 ml-3 transition-transform duration-800"
-            style={{ backgroundColor: "var(--gold)", transformOrigin: "right", transform: mounted ? "scaleX(1)" : "scaleX(0)", transitionDelay: "1s" }}
+            className="inline-block h-px w-8 ml-3"
+            style={{ backgroundColor: "var(--gold)" }}
           />
         </div>
 
         <h1
-          className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05] transition-all duration-1000"
+          className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05] animate-fade-up"
           style={{
             fontFamily: "var(--font-display)",
             color: "var(--warm-cream)",
-            opacity: mounted ? 1 : 0,
-            transform: mounted ? "translateY(0)" : "translateY(40px)",
-            transitionDelay: "0.9s",
+            animationDelay: "0.9s",
+            opacity: 0,
           }}
         >
           Where Your Home
@@ -76,16 +59,16 @@ export default function HeroSection() {
         </h1>
 
         <p
-          className="mt-6 max-w-lg text-base md:text-lg leading-relaxed transition-all duration-1000"
-          style={{ color: "rgba(245,242,235,0.8)", opacity: mounted ? 1 : 0, transitionDelay: "1.3s" }}
+          className="mt-6 max-w-lg text-base md:text-lg leading-relaxed animate-fade-in"
+          style={{ color: "rgba(245,242,235,0.8)", animationDelay: "1.3s", opacity: 0 }}
         >
           Curated furnishings and bespoke decor designed to transform
           everyday spaces into enduring sanctuaries of warmth and beauty.
         </p>
 
         <div
-          className="mt-10 flex flex-col sm:flex-row gap-4 transition-all duration-800"
-          style={{ opacity: mounted ? 1 : 0, transform: mounted ? "translateY(0)" : "translateY(20px)", transitionDelay: "1.6s" }}
+          className="mt-10 flex flex-col sm:flex-row gap-4 animate-fade-up"
+          style={{ animationDelay: "1.6s", opacity: 0 }}
         >
           <button onClick={() => scrollTo("offerings")} className="btn-primary">
             Explore Our World
@@ -98,8 +81,8 @@ export default function HeroSection() {
 
       {/* Scroll indicator */}
       <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 transition-opacity duration-1000"
-        style={{ opacity: mounted ? 1 : 0, transitionDelay: "2.2s" }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 animate-fade-in"
+        style={{ animationDelay: "2.2s", opacity: 0 }}
       >
         <span className="text-[10px] uppercase tracking-[0.25em]" style={{ color: "var(--gold-light)" }}>
           Scroll
