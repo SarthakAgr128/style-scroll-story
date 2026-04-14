@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import heroImage from "@/assets/hero-living.jpg";
 
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false);
