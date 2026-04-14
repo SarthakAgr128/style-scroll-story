@@ -43,7 +43,6 @@ export default function HeroSection() {
         >
           <motion.span
             className="inline-block h-px w-8 mr-3"
-            style={{ backgroundColor: "var(--gold)" }}
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
