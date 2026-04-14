@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 
 export default function ContactSection() {
@@ -48,17 +47,13 @@ export default function ContactSection() {
           {/* Right: Form */}
           <ScrollReveal delay={0.2} direction="right">
             {submitted ? (
-              <motion.div
-                className="flex items-center justify-center h-full"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-              >
+              <div className="flex items-center justify-center h-full">
                 <div className="text-center">
                   <span className="text-4xl text-gold block mb-4">✦</span>
                   <h3 className="heading-md text-foreground mb-2">Thank You</h3>
                   <p className="text-muted-foreground">We'll be in touch soon.</p>
                 </div>
-              </motion.div>
+              </div>
             ) : (
               <form
                 onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
@@ -99,14 +94,12 @@ export default function ContactSection() {
                     placeholder="Describe your vision..."
                   />
                 </div>
-                <motion.button
+                <button
                   type="submit"
-                  className="btn-primary w-full justify-center mt-4"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  className="btn-primary w-full justify-center mt-4 hover:scale-[1.02] active:scale-[0.98] transition-transform"
                 >
                   Send Enquiry
-                </motion.button>
+                </button>
               </form>
             )}
           </ScrollReveal>

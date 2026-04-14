@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 
 const reasons = [
@@ -28,11 +27,9 @@ export default function WhyUsSection() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {reasons.map((r, i) => (
             <ScrollReveal key={r.title} delay={i * 0.1}>
-              <motion.div
-                className="p-6 md:p-8 border rounded-sm transition-all duration-500"
+              <div
+                className="p-6 md:p-8 border rounded-sm transition-all duration-500 hover:-translate-y-1"
                 style={{ borderColor: "rgba(245,242,235,0.1)" }}
-                whileHover={{ borderColor: "var(--gold)", y: -4 }}
-                transition={{ duration: 0.4 }}
               >
                 <span className="text-xs font-medium mb-4 block" style={{ color: "var(--gold)" }}>
                   0{i + 1}
@@ -46,7 +43,7 @@ export default function WhyUsSection() {
                 <p className="text-sm leading-relaxed" style={{ color: "rgba(245,242,235,0.55)" }}>
                   {r.text}
                 </p>
-              </motion.div>
+              </div>
             </ScrollReveal>
           ))}
         </div>

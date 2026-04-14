@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import ScrollReveal from "./ScrollReveal";
 import gallery1 from "@/assets/gallery-1.jpg";
 import gallery2 from "@/assets/gallery-2.jpg";
@@ -32,13 +31,9 @@ export default function GallerySection() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {images.map((img, i) => (
             <ScrollReveal key={img.label} delay={i * 0.1}>
-              <motion.div
-                className="group relative overflow-hidden cursor-pointer"
-                whileHover={{ y: -8 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              >
+              <div className="group relative overflow-hidden cursor-pointer transition-transform duration-500 hover:-translate-y-2">
                 <div className="aspect-[3/4] overflow-hidden">
-                  <motion.img
+                  <img
                     src={img.src}
                     alt={img.alt}
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
@@ -55,7 +50,7 @@ export default function GallerySection() {
                     {img.label}
                   </span>
                 </div>
-              </motion.div>
+              </div>
             </ScrollReveal>
           ))}
         </div>
