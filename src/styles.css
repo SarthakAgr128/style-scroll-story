@@ -223,28 +223,34 @@ html {
   .marquee-track {
     display: flex;
     width: max-content;
-    animation: marquee 30s linear infinite;
-  }
-  .marquee-track:hover {
-    animation-play-state: paused;
   }
 
-  .glow-card {
-    position: relative;
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .text-reveal {
     overflow: hidden;
+    display: block;
   }
-  .glow-card::before {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    background: conic-gradient(from var(--glow-angle, 0deg), transparent 60%, var(--gold) 80%, transparent 100%);
-    opacity: 0;
-    transition: opacity 0.6s;
-    border-radius: inherit;
-    z-index: -1;
+
+  .mask-image-parallax {
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .glow-card:hover::before {
-    opacity: 1;
-    animation: spin 3s linear infinite;
+
+  .mask-image-parallax.hidden {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  .hover-lift {
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hover-lift:hover {
+    transform: translateY(-10px);
+  }
+
+  .scroll-progress-bar {
+    @apply fixed top-0 left-0 right-0 h-[2px] bg-amber-400 origin-left z-[100];
   }
 }

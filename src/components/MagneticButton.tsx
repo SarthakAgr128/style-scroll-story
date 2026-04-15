@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from "react";
+import { useRef, useState, type ReactNode } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 interface MagneticButtonProps {
@@ -12,15 +12,17 @@ interface MagneticButtonProps {
 export default function MagneticButton({
   children,
   className = "",
-  strength = 0.3,
+  strength = 0.35,
   onClick,
   type = "button",
 }: MagneticButtonProps) {
   const ref = useRef<HTMLButtonElement>(null);
+  const [hovered, setHovered] = useState(false);
+  
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 200, damping: 15 });
-  const springY = useSpring(y, { stiffness: 200, damping: 15 });
+  const springX = useSpring(x, { stiffness: 150, damping: 15 });
+  const springY = useSpring(y, { stiffness: 150, damping: 15 });
 
   const handleMouse = (e: React.MouseEvent) => {
     const el = ref.current;
@@ -35,6 +37,7 @@ export default function MagneticButton({
   const reset = () => {
     x.set(0);
     y.set(0);
+    setHovered(false);
   };
 
   return (
@@ -42,12 +45,22 @@ export default function MagneticButton({
       ref={ref}
       style={{ x: springX, y: springY }}
       onMouseMove={handleMouse}
+      onMouseEnter={() => setHovered(true)}
       onMouseLeave={reset}
+      whileTap={{ scale: 0.95 }}
       onClick={onClick}
       type={type}
-      className={className}
+      className={`${className} cursor-none`}
     >
-      {children}
+      <motion.div
+        animate={{ 
+          scale: hovered ? 1.05 : 1,
+        }}
+        transition={{ type: "spring", stiffness: 200, damping: 10 }}
+        className="flex items-center justify-center w-full h-full"
+      >
+        {children}
+      </motion.div>
     </motion.button>
   );
 }

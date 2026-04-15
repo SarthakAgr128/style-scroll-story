@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import ScrollReveal from "./ScrollReveal";
+import ScrollReveal, { TextReveal } from "./ScrollReveal";
 
 const aboutImage =
   "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1200&q=80&auto=format&fit=crop";
@@ -49,95 +49,103 @@ export default function AboutSection() {
     offset: ["start end", "end start"],
   });
 
-  const imgY = useTransform(scrollYProgress, [0, 1], ["8%", "-8%"]);
-  const imgScale = useTransform(scrollYProgress, [0, 0.5], [1.1, 1]);
+  const imgY = useTransform(scrollYProgress, [0, 1], ["15%", "-15%"]);
+  const imgScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.2, 1.1, 1.2]);
+  const rotateImage = useTransform(scrollYProgress, [0, 1], [-2, 2]);
 
   return (
-    <section ref={sectionRef} id="about" className="section-padding bg-background">
+    <section ref={sectionRef} id="about" className="section-padding bg-background relative z-10">
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-20 items-center">
-          <ScrollReveal direction="left" className="order-2 lg:order-1">
-            <div className="relative overflow-hidden rounded-sm">
-              <motion.div style={{ y: imgY, scale: imgScale }}>
-                <img
-                  src={aboutImage}
-                  alt="Elegant bedroom interior"
-                  className="w-full object-cover aspect-[4/5]"
-                  loading="lazy"
-                  width={960}
-                  height={1200}
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-center">
+          <div className="order-2 lg:order-1">
+            <ScrollReveal direction="left" duration={1.2}>
+              <div className="relative overflow-hidden rounded-sm group">
+                <motion.div style={{ y: imgY, scale: imgScale, rotate: rotateImage }} className="will-change-transform">
+                  <img
+                    src={aboutImage}
+                    alt="Elegant bedroom interior"
+                    className="w-full object-cover aspect-[4/5] grayscale-[0.2] group-hover:grayscale-0 transition-all duration-1000"
+                    loading="lazy"
+                    width={960}
+                    height={1200}
+                  />
+                </motion.div>
+                
+                {/* Overlay reveal effect */}
+                <motion.div
+                  initial={{ scaleY: 1 }}
+                  whileInView={{ scaleY: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute inset-0 origin-bottom bg-amber-50"
+                  style={{ zIndex: 2 }}
                 />
-              </motion.div>
-              <div
-                className="absolute bottom-0 left-0 right-0 h-1/3"
-                style={{
-                  background:
-                    "linear-gradient(to top, rgba(30,25,18,0.15), transparent)",
-                }}
-              />
-              <motion.div
-                initial={{ scaleX: 1 }}
-                whileInView={{ scaleX: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute inset-0 origin-right"
-                style={{ backgroundColor: "var(--background)" }}
-              />
-            </div>
-          </ScrollReveal>
+                
+                <div
+                  className="absolute inset-0 z-10 pointer-events-none border-[1px] border-white/20 m-4"
+                />
+              </div>
+            </ScrollReveal>
+          </div>
 
           <div className="order-1 lg:order-2">
             <ScrollReveal>
               <p className="label-text mb-4">Our Story</p>
             </ScrollReveal>
+            
             <ScrollReveal delay={0.1}>
-              <div className="gold-line mb-8" />
+              <div className="gold-line mb-8 w-24" />
             </ScrollReveal>
-            <ScrollReveal delay={0.15}>
-              <h2 className="heading-lg text-foreground mb-6">
+            
+            <div className="mb-8">
+              <TextReveal className="heading-lg text-foreground leading-[1.1]" delay={0.2}>
                 Born from a Love
-                <br />
-                <em className="italic">for Beautiful Spaces</em>
-              </h2>
-            </ScrollReveal>
-            <ScrollReveal delay={0.2}>
-              <p className="body-md text-muted-foreground mb-6">
+              </TextReveal>
+              <TextReveal className="heading-lg text-foreground leading-[1.1] italic" delay={0.3}>
+                for Beautiful Spaces
+              </TextReveal>
+            </div>
+
+            <ScrollReveal delay={0.4}>
+              <p className="body-md text-muted-foreground mb-6 font-light">
                 Vishesh Livings was founded on a singular belief — that the
                 spaces we inhabit shape the lives we lead. Every texture, every
                 hue, every carefully chosen piece tells a story of intention and
                 artistry.
               </p>
             </ScrollReveal>
-            <ScrollReveal delay={0.25}>
-              <p className="body-md text-muted-foreground mb-8">
+            
+            <ScrollReveal delay={0.5}>
+              <p className="body-md text-muted-foreground mb-10 font-light">
                 We are not just a home decor brand. We are curators of
                 atmosphere, architects of comfort, and believers in the quiet
                 luxury of thoughtful design. Our journey begins with you — and
                 the home you've always envisioned.
               </p>
             </ScrollReveal>
-            <ScrollReveal delay={0.3}>
-              <div className="flex items-center gap-6">
-                <div>
+
+            <ScrollReveal delay={0.6}>
+              <div className="flex items-center gap-10">
+                <div className="group cursor-default">
                   <span
-                    className="text-3xl md:text-4xl font-light text-gold"
+                    className="text-4xl md:text-5xl font-light text-gold transition-colors duration-500 group-hover:text-foreground"
                     style={{ fontFamily: "var(--font-display)" }}
                   >
                     <AnimatedCounter target={100} suffix="+" />
                   </span>
-                  <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground mt-1">
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mt-2 font-semibold">
                     Curated Designs
                   </p>
                 </div>
-                <div className="h-10 w-px bg-border" />
-                <div>
+                <div className="h-12 w-px bg-border/60" />
+                <div className="group cursor-default">
                   <span
-                    className="text-3xl md:text-4xl font-light text-gold"
+                    className="text-4xl md:text-5xl font-light text-gold transition-colors duration-500 group-hover:text-foreground"
                     style={{ fontFamily: "var(--font-display)" }}
                   >
                     ∞
                   </span>
-                  <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground mt-1">
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mt-2 font-semibold">
                     Possibilities
                   </p>
                 </div>

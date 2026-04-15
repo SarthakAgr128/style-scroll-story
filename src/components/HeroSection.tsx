@@ -1,11 +1,11 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 import MagneticButton from "./MagneticButton";
 
 const heroImage =
   "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&q=80&auto=format&fit=crop";
 
-const particles = Array.from({ length: 20 }, (_, i) => ({
+const particles = Array.from({ length: 25 }, (_, i) => ({
   id: i,
   x: Math.random() * 100,
   y: Math.random() * 100,
@@ -14,33 +14,37 @@ const particles = Array.from({ length: 20 }, (_, i) => ({
   duration: Math.random() * 4 + 4,
 }));
 
-const wordVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.6 } },
-};
-
-const charVariants = {
-  hidden: { opacity: 0, y: 60, rotateX: -80 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    rotateX: 0,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  const springX = useSpring(mouseX, { damping: 30, stiffness: 200 });
+  const springY = useSpring(mouseY, { damping: 30, stiffness: 200 });
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
 
-  const imgScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
-  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [0.45, 0.8]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const { innerWidth, innerHeight } = window;
+      mouseX.set((clientX / innerWidth - 0.5) * 40);
+      mouseY.set((clientY / innerHeight - 0.5) * 40);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
+
+  const imgScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.3]);
+  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
+  const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [0.4, 0.75]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
@@ -50,12 +54,20 @@ export default function HeroSection() {
   const line2 = "Finds Its Soul".split("");
 
   return (
-    <section ref={ref} id="hero" className="relative h-screen w-full overflow-hidden">
-      <motion.div className="absolute inset-0" style={{ scale: imgScale, y: imgY }}>
+    <section ref={ref} id="hero" className="relative h-[110vh] w-full overflow-hidden">
+      <motion.div 
+        className="absolute inset-0 z-0" 
+        style={{ 
+          scale: imgScale, 
+          y: imgY,
+          x: springX,
+          rotate: useTransform(springX, [-20, 20], [-1, 1])
+        }}
+      >
         <img
           src={heroImage}
           alt="Luxurious living room by Vishesh Livings"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover brightness-[0.9]"
         />
         <motion.div
           className="absolute inset-0 bg-black"
@@ -66,7 +78,7 @@ export default function HeroSection() {
       {particles.map((p) => (
         <motion.div
           key={p.id}
-          className="absolute rounded-full bg-amber-300/30"
+          className="absolute rounded-full bg-amber-200/40 z-10"
           style={{
             left: `${p.x}%`,
             top: `${p.y}%`,
@@ -74,8 +86,9 @@ export default function HeroSection() {
             height: p.size,
           }}
           animate={{
-            y: [-20, 20, -20],
-            opacity: [0, 0.8, 0],
+            y: [-30, 30, -30],
+            x: [-15, 15, -15],
+            opacity: [0, 0.6, 0],
           }}
           transition={{
             duration: p.duration,
@@ -88,91 +101,90 @@ export default function HeroSection() {
 
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center"
+        className="relative z-20 flex h-full flex-col items-center justify-center px-6 text-center"
       >
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="mb-8 flex items-center gap-3"
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+          className="mb-10 flex items-center gap-4"
         >
           <motion.span
             className="inline-block h-px bg-amber-400"
             initial={{ width: 0 }}
-            animate={{ width: 32 }}
-            transition={{ duration: 1, delay: 0.5 }}
+            animate={{ width: 48 }}
+            transition={{ duration: 1.2, delay: 0.8 }}
           />
-          <span className="text-sm md:text-base uppercase tracking-[0.35em] font-medium text-amber-300">
+          <span className="text-xs md:text-sm uppercase tracking-[0.5em] font-semibold text-amber-200 drop-shadow-sm">
             Live Special
           </span>
           <motion.span
             className="inline-block h-px bg-amber-400"
             initial={{ width: 0 }}
-            animate={{ width: 32 }}
-            transition={{ duration: 1, delay: 0.5 }}
+            animate={{ width: 48 }}
+            transition={{ duration: 1.2, delay: 0.8 }}
           />
         </motion.div>
 
-        <motion.h1
-          variants={wordVariants}
-          initial="hidden"
-          animate="visible"
-          className="max-w-4xl text-5xl md:text-7xl lg:text-8xl font-light tracking-tight leading-[1.05] text-white"
-          style={{ fontFamily: "var(--font-display)", perspective: "600px" }}
+        <h1
+          className="max-w-5xl text-6xl md:text-8xl lg:text-[10rem] font-light tracking-tighter leading-[0.9] text-white"
+          style={{ fontFamily: "var(--font-display)" }}
         >
-          <span className="block" style={{ perspective: "600px" }}>
-            {line1.map((char, i) => (
-              <motion.span
-                key={`l1-${i}`}
-                variants={charVariants}
-                className="inline-block"
-                style={{ transformOrigin: "bottom" }}
-              >
-                {char === " " ? "\u00A0" : char}
-              </motion.span>
-            ))}
-          </span>
-          <em className="font-normal italic block" style={{ perspective: "600px" }}>
-            {line2.map((char, i) => (
-              <motion.span
-                key={`l2-${i}`}
-                variants={charVariants}
-                className="inline-block"
-                style={{ transformOrigin: "bottom" }}
-              >
-                {char === " " ? "\u00A0" : char}
-              </motion.span>
-            ))}
-          </em>
-        </motion.h1>
+          <div className="overflow-hidden pb-2">
+            <motion.span 
+              className="block italic font-light"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+            >
+              Where Your Home
+            </motion.span>
+          </div>
+          <div className="overflow-hidden">
+            <motion.span 
+              className="block font-normal"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
+            >
+              Finds Its Soul
+            </motion.span>
+          </div>
+        </h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.6 }}
-          className="mt-6 max-w-lg text-base md:text-lg leading-relaxed text-white/80"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.5, delay: 1.5 }}
+          className="mt-8 max-w-xl text-lg md:text-xl leading-relaxed text-white/70 font-light"
         >
-          Curated furnishings and bespoke decor designed to transform everyday
-          spaces into enduring sanctuaries of warmth and beauty.
+          Elevating everyday moments into extraordinary experiences through 
+          masterfully crafted furnishings and soulful design.
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.9 }}
-          className="mt-10 flex flex-col sm:flex-row gap-4"
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 1.8 }}
+          className="mt-12 flex flex-col sm:flex-row gap-6"
         >
           <MagneticButton
             onClick={() => scrollTo("offerings")}
             className="btn-primary"
           >
-            <span>Explore Our World</span>
+            <span className="relative z-10">Explore Our World</span>
           </MagneticButton>
           <MagneticButton
-            onClick={() => scrollTo("contact")}
-            className="inline-flex items-center gap-2 px-8 py-4 text-sm uppercase tracking-[0.15em] font-medium border border-white text-white transition-all duration-500 hover:bg-white hover:text-black"
+            onClick={() => scrollTo("about")}
+            className="group inline-flex items-center gap-3 px-10 py-4 text-sm uppercase tracking-[0.2em] font-medium border border-white/30 text-white backdrop-blur-sm transition-all duration-500 hover:bg-white hover:text-black hover:border-white"
           >
-            <span>Get in Touch</span>
+            <span>Our Journey</span>
+            <motion.span
+              animate={{ x: [0, 4, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              →
+            </motion.span>
           </MagneticButton>
         </motion.div>
       </motion.div>
@@ -180,17 +192,32 @@ export default function HeroSection() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-10"
+        transition={{ delay: 2.8, duration: 1 }}
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-20 cursor-pointer"
+        onClick={() => scrollTo("about")}
       >
-        <span className="text-[10px] uppercase tracking-[0.25em] text-amber-300">
-          Scroll
+        <span className="text-[10px] uppercase tracking-[0.4em] text-amber-300/80 font-medium">
+          Discover More
         </span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="h-10 w-px bg-amber-300/60"
-        />
+        <div className="relative w-px h-16 bg-white/10 overflow-hidden">
+          <motion.div
+            animate={{ y: ["-100%", "100%"] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-0 left-0 w-full h-full bg-amber-400"
+          />
+        </div>
+      </motion.div>
+
+      {/* Decorative element */}
+      <motion.div
+        initial={{ opacity: 0, rotate: -90 }}
+        animate={{ opacity: 1, rotate: -90 }}
+        transition={{ delay: 2.2, duration: 1 }}
+        className="absolute right-12 top-1/2 -translate-y-1/2 hidden lg:block"
+      >
+        <span className="text-[10px] uppercase tracking-[0.6em] text-white/30 whitespace-nowrap">
+          Est. MMXXIV — Vishesh Livings
+        </span>
       </motion.div>
     </section>
   );
